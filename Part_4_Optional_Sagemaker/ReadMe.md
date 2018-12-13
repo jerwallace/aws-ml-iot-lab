@@ -66,4 +66,4 @@ This will open your Jupyter notebook.
 ![run](https://user-images.githubusercontent.com/11222214/38316244-21a07194-37df-11e8-9821-21d5d6e57976.JPG)
 
 ----------------------------------
-[Back (Challenge 2: Sentiment Analysis)](Part_3_Sentiment_Analysis.md)
+[Back (Challenge 2: Sentiment Analysis)](../Part_3_Sentiment_Analysis.md)
