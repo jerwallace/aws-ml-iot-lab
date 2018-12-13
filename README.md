@@ -28,7 +28,9 @@ Before we get going, take a moment to setup and register your Deep Lens. After y
 
 *Note: You will need an active AWS account to get started. To create one, [click here](https://portal.aws.amazon.com/billing/signup?redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).*
 
-## [Challenge 1: Deploy an AWS Lambda Function and Detection Model to Detect and Crop Faces from a Video Feed](Prep_Challenge/README.md)
+## Challenge 1: Deploy an AWS Lambda Function and Detection Model to Detect and Crop Faces from a Video Feed
+
+# [Start Lab Content](Prep_Challenge/README.md)
 
 The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. You will be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, you are going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
