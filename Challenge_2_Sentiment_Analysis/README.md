@@ -1,94 +1,216 @@
 
 # Challenge 2: Deploy an AWS Lambda Function that will perform Sentiment Analysis with AWS Rekognition
 
-In the final section of our workshop, we will capture the sentiment from the cropped faces of concert goers in the S3 bucket.
+Now that you have configured our DeepLens to send images to our S3 bucket, the next step is to process our face crops through Rekognition to extract emotion scores, storing scores in a DynamoDB table, and pushing scores to Cloudwatch so you can build a dashboard to track emotion metrics.
 
-**Step 1- Create DynamoDB table**
+## Create Rekognition Lambda
 
-Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Dynamo
+You are going to use AWS Lambda to create a script that does all three of these things every time a face crop is pushed to S3. Navigate to the Lambda console and under the "Function" Dashboard select "Create function" as you did before. This time you will be authoring a function from scratch:
 
-Click on Create Table.
+![Alt text](../screenshots/create_lambda_0.png)
 
-Name of the table: recognize-emotions-your-name
-Primary key: s3key
+Next:
+* Under Name: enter your rekognition lambda name
+* Under runtime: enter "Python 2.7"
+* Under role: Select "Create new role from template(s)"
+* Under role name: Enter your rekogition lambda role name
+* Under Policy templates: Add "S3 object read-only permissions"
 
-Click on Create. This will create a table in your DynamoDB.
+Then click "Create function."
 
-**Step 2- Create a role for cloud lambda function**
+![Alt text](../screenshots/create_lambda_1.png)
 
-Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for IAM
+You should now be on the lambda function screen. Before you start editing the lambda, you need to assign additional permissions to the lambda role. As you can tell from the services listed on the right, you currently only have access to "Amazon CloudWatch Logs" and "Amazon S3".
 
-Choose 'Create Role'
+![Alt text](../screenshots/edit_lambda_0.png)
 
-Select “AWS Service”
+You need to add permissions for Rekognition and DynamoDB. Navigate to the IAM dashboard by searching for "IAM" in the "Services" drop-down. Once there, click "Roles" on the left side-bar and type in your rekognition lambda role name.
 
-Select “Lambda” and choose "Next:Permissions"
+![Alt text](../screenshots/add_permissions_0.png)
 
-Attach the following policies: 
+Select your role, and you should see two policies already created from the template.
 
-* AmazonDynamoDBFullAcces
-* AmazonS3FullAccess
-* AmazonRekognitionFullAccess
-* CloudWatchFullAccess
+![Alt text](../screenshots/add_permissions_1.png)
 
-Click Next
+Select "Attach Policy". First, search for "DynamDB", and select "AmazonDynamoDBFullAccess". 
 
-Provide a name for the role: rekognizeEmotions
+![Alt text](../screenshots/add_permissions_2.png)
 
-Choose 'Create role'
+Next, search for "Rekognition" and select "AmazonRekognitionFullAccess".
+
+![Alt text](../screenshots/add_permissions_3.png)
+
+Then, click "Attach policy", and you should now see these policies attached to your role.
+
+![Alt text](../screenshots/add_permissions_4.png)
+
+Back on the lambda function page, you can now see additional resources available to us on the right. 
+
+![Alt text](../screenshots/edit_lambda_1.png)
+
+You know that you want this lambda script to run everytime a face crop is uploaded to S3, add an event trigger to this Lambda. On the left, you'll see a list of triggers. Select "S3". At the bottom of the page, a configuration menu will open up:
+* Under Bucket: Select the bucket you created to store faces (this will be different from mine).
+* Under Event type: Select "PUT". You want the script to trigger when a PutObject call is made.
+* Under Prefix: Enter "faces". You want the script to only trigger on items uploaded to the faces prefix.
+
+![Alt text](../screenshots/edit_lambda_2.png)
+
+Then click "Add". Next, select the center box with your rekognition lambda's name. The menu at the bottom of the page will now let you manually enter the function code.
+
+![Alt text](../screenshots/edit_lambda_3.png)
+
+Next, you're going to copy and paste code we have provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "[rekognize-emotions.py](../Challenge_2_ML_Edge/rekognize-emotions.py)", but it is included here as well for your convenience:
+
+You will want to download the file from that location, via the "raw" link.
+
+```python
+from __future__ import print_function
+
+import boto3
+import urllib
+import datetime
+
+print('Loading function')
+
+rekognition = boto3.client('rekognition')
+cloudwatch = boto3.client('cloudwatch')
 
 
-**Step 3- Create a lambda function that runs in the cloud**
+# --------------- Helper Function to call CloudWatch APIs ------------------
 
-The inference lambda function that you deployed earlier will upload the cropped faces to your S3. On S3 upload, this new lambda function gets triggered and runs the Rekognize Emotions API by integrating with Amazon Rekognition. 
+def push_to_cloudwatch(name, value):
+    try:
+        response = cloudwatch.put_metric_data(
+            Namespace='string',
+            MetricData=[
+                {
+                    'MetricName': name,
+                    'Value': value,
+                    'Unit': 'Percent'
+                },
+            ]
+        )
+        print("Metric pushed: {}".format(response))
+    except Exception as e:
+        print("Unable to push to cloudwatch\n e: {}".format(e))
+        return True
 
-Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Lambda
+# --------------- Helper Functions to call Rekognition APIs ------------------
 
-Click 'Create function'
+def detect_faces(bucket, key):
+    print("Key: {}".format(key))
+    response = rekognition.detect_faces(Image={"S3Object":
+                                               {"Bucket": bucket,
+                                                "Name": key}},
+                                        Attributes=['ALL'])
 
-Choose 'Author from scratch'
+    if not response['FaceDetails']:
+        print ("No Face Details Found!")
+        return response
 
-Name the function: recognize-emotion-your-name.  
-Runtime: Choose Python 2.7
-Role: Choose an existing role
-Existing role: rekognizeEmotions
+    push = False
+    dynamo_obj = {}
+    dynamo_obj['s3key'] = key
 
-Choose Create function
+    for index, item in enumerate(response['FaceDetails'][0]['Emotions']):
+        print("Item: {}".format(item))
+        if int(item['Confidence']) > 10:
+            push = True
+            dynamo_obj[item['Type']] = str(round(item["Confidence"], 2))
+            push_to_cloudwatch(item['Type'], round(item["Confidence"], 2))
 
-Replace the default script with the script in [recognize-emotions.py](rekognize-emotions.py). You can select the script by selecting Raw in the Github page and choosing the script using ctrl+A/ cmd+A . Copy the script and paste it into the lambda function (make sure you delete the default code).
+    if push:  # Push only if at least on emotion was found
+        table = boto3.resource('dynamodb').Table('rekognize-faces')
+        table.put_item(Item=dynamo_obj)
 
-Make sure you enter the table name you created earlier in the section highlighted below:
+    return response
 
-![dynamodb](https://user-images.githubusercontent.com/11222214/38838790-b8b72116-418c-11e8-9a77-9444fc03bba6.JPG)
+# --------------- Main handler ------------------
 
 
-Next, we need to add the event that triggers this lambda function. This will be an “S3:ObjectCreated” event that happens every time a face is uploaded to the face S3 bucket. Add S3 trigger from designer section on the left. 
+def lambda_handler(event, context):
+    '''Demonstrates S3 trigger that uses
+    Rekognition APIs to detect faces, labels and index faces in S3 Object.
+    '''
 
-Configure with the following:
+    # Get the object from the event
+    bucket = event['Records'][0]['s3']['bucket']['name']
+    key = urllib.unquote_plus(event['Records'][0]['s3']['object']['key'].encode('utf8'))
+    try:
+        # Calls rekognition DetectFaces API to detect faces in S3 object
+        response = detect_faces(bucket, key)
 
-Bucket name: face-detection-your-name (you created this bucket earlier)
-Event type- Object Created
-Prefix- faces/
-Filter- .jpg
-Enable trigger- ON (keep the checkbox on)
+        return response
+    except Exception as e:
+        print("Error processing object {} from bucket {}. ".format(key, bucket) +
+              "Make sure your object and bucket exist and your bucket is in the same region as this function.")
+        raise e
+```
 
-Save the lambda function
+Plese take a look at what this script does. The Function `lambda_handler` handles the lambda script when it's triggered by an event, in this case the "PutObject" to your S3 bucket under the prefix "faces". The handler then calls the `detect_faces`, which does the following:
 
-Under 'Actions' tab choose **Publish**
+* Makes a `detect_faces` API call to Rekognition, handling an empty response
+* Checks if any emotion scores are greater than 10
+* If so, pushes emotion type and confidence score to CloudWatch
+* If at least one emotion in the response is detected or significant, the record is stored in a DynamoDB table.
 
-**Step 4- View the emotions on a dashboard**
+Once you've copy and pasted the code, you are almost ready to Save the function so it can start triggering.
 
-Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Cloudwatch
+![Alt text](../screenshots/edit_lambda_4.png)
 
-Create a dashboard called “sentiment-dashboard-your-name”
+Before you do that, you need to create the DynamoDB table to store detected emotions and emotion scores.
 
-Choose Line in the widget
+## Create DynamoDB Table
 
-Under Custom Namespaces, select “string”, “Metrics with no dimensions”, and then select all metrics.
+Navigate to the DynamoDB dashboard by seraching "DynamDB" in the "Services" drop-down tab. Click "Create table" on the dashboard page (it may look different if you've created a table before).
 
-Next, set “Auto-refresh” to the smallest interval possible (1h), and change the “Period” to whatever works best for you (1 second or 5 seconds)
+![Alt text](../screenshots/dynamodb_0.png)
 
-NOTE: These metrics will only appear once they have been sent to Cloudwatch via the Rekognition Lambda. It may take some time for them to appear after your model is deployed and running locally. If they do not appear, then there is a problem somewhere in the pipeline.
+Next:
+* Under Table name: Enter the table specified in the lambda function, "rekognize-faces-your-name"
+* Under primary key: Enter "s3key".
+
+![Alt text](../screenshots/dynamodb_0.png)
+
+Then click create. Once created, go back to your lambda function and make sure to click "Save" at the top right. You lambda function is now active and should begin triggering upon face crop uploads.
+
+## Emotion-tracking Dashboard using Cloudwatch
+
+Now that you have created the lambda function for processing cropped faces and a DynamoDB table to record results, you are going to build the dashboard that is the center-piece of our application: real-time emotion tracking. At this point, you should have your IoT device running and collecting face crops if it hasn't been already.
+
+Navigate to CloudWatch by searching for "CloudWatch" under the "Services" tab. Once at the dashboard, select "Dashboards" from the left side-bar.
+
+![Alt text](../screenshots/cloudwatch_0.png)
+
+Select "Create Dashboard", then enter your dashboard name.
+
+![Alt text](../screenshots/cloudwatch_1.png)
+
+Then select "Line" widget and click "Configure".
+
+![Alt text](../screenshots/cloudwatch_2.png)
+
+You'll then be able to configure your line widget. 
+
+![Alt text](../screenshots/cloudwatch_3.png)
+
+* Click on "Untitled graph" at the top left to name your graph. 
+* In the "Metrics" menu, you should see a section that says "Custom Namespaces". 
+* Click on "string" (if this is not there, your face crops haven't made it through the pipeline yet. Wait a few minutes).
+* Click on "Metrics with no dimensions"
+* Select all available metrics (there should be 7. These populate as the emotions are detected. If they're not all there, make some funny faces at your camera to get a range of detections.)
+
+Then, click the tab "Graphed metrics"
+
+![Alt text](../screenshots/cloudwatch_4.png)
+
+Here, you can change how your metrics are displayed. By default, point metrics shown are averages of 5 min. periods. You may want to change the granularity to a smaller period to actually start seeing line graphs being drawn.
+
+In addition, make sure to turn on "Auto refresh" and set the interval to 10 seconds.
+
+![Alt text](../screenshots/cloudwatch_5.png)
+
+Finally, click "Create Widget" and you'll have successfully created the emotion tracking dashboard for your application! Now wait and see the results come in as your IoT device sends frames through your pipeline to detect emotions over time.
 
 -----------------------------------
 [Back (Challenge 1: Facial Detection)](../Challenge_1_Crop_Faces_With_DeepLens/README.md) | [Next (Bonus Challenge: Custom Facial Detection with SageMaker)](../Bonus_Challenge_Optional_Sagemaker/README.md)
