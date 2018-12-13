@@ -119,4 +119,4 @@ Congratulations! You have successfully registered and configured your DeepLens d
 ![device registered successfully](https://user-images.githubusercontent.com/11222214/41579540-3cc3560a-734c-11e8-82c0-6fc18c3952c8.JPG)
 
 -----------------------------------
-[Back (Home)](README.md) | [Next (Challenge 1: Facial Detection)](Part_2_Crop_Faces_With_DeepLens.md)
+[Back (Home)](README.md) | [Next (Challenge 1: Facial Detection)](Challenge_1_Crop_Faces_With_DeepLens/README.md)
