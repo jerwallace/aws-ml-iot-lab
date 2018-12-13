@@ -2,7 +2,7 @@
 
 Welcome to DataPalooza! 
 
-Your bold startup has taken the challenge of providing a new type of EDM music festival experience. At venues with multiple stages, festival-goers are always looking to identify which DJ stage areas are the liveliest. This causes them to constantly move around between different stages and miss out. You are looking to use Machine Learning and IoT to come up with a connected fan experience that takes the music festival scene to the next level.
+Your bold startup has taken the challenge of providing a new type of EDM music festival experience. At venues with multiple stages, festival-goers are always looking to identify which DJ stage areas are the liveliest. This causes them to constantly move around between different stages and miss out. You are looking to use Machine Learning and IoT to detect and analyze facial expressions to create a more connected fan experience that takes the music festival scene to the next level. 
 
 The objective of the workshop is to learn how to build and deploy a machine learning model and then run inference on it from the cloud and from the edge device.
 
