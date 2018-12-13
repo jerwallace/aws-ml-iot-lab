@@ -51,7 +51,7 @@ The next step of the pipeline will be to analyze the photos that are being writt
 
 Hey wizards! If you have zipped through the lab, try building your own facial detection model using Amazon Sagemaker. For other labs and fun activities with the Deep Lens, check out this repository. 
 
-**[Click here to Start the Bonus Challenge!](Part_4_Optional_Sagemaker/README.md)**
+**[Click here to Start the Bonus Challenge!](Part_4_Optional_Sagemaker/ReadMe.md)**
 
 ## Closeout
 
