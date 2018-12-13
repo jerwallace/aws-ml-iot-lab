@@ -14,7 +14,7 @@ Name your bucket : face-detection-your-name
 
 Click on **Create**
 
-### Create DeepLens Lambda
+## Create DeepLens Lambda
 
 Now that you've registered your DeepLens device, it's time to create a custom project that we can deploy to the device to run face-detection and push crops to S3.
 
