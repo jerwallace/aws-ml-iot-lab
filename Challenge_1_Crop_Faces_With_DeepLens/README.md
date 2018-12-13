@@ -6,13 +6,10 @@ In the first challenge, we will crop the faces from our concert photos collected
 
 First, we need to create an S3 bucket that we can upload faces to.
 
-Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for S3
-
-Choose 'Create bucket'
-
-Name your bucket : face-detection-your-name
-
-Click on **Create**
+1. Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for S3
+2. Choose 'Create bucket'
+3. Name your bucket : face-detection-your-name
+4. Click on **Create**
 
 ## Create DeepLens Lambda
 
