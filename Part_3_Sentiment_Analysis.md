@@ -89,3 +89,6 @@ Under Custom Namespaces, select “string”, “Metrics with no dimensions”, 
 Next, set “Auto-refresh” to the smallest interval possible (1h), and change the “Period” to whatever works best for you (1 second or 5 seconds)
 
 NOTE: These metrics will only appear once they have been sent to Cloudwatch via the Rekognition Lambda. It may take some time for them to appear after your model is deployed and running locally. If they do not appear, then there is a problem somewhere in the pipeline.
+
+-----------------------------------
+[Back (Challenge 1: Facial Detection)](Part_2_Crop_Faces_With_DeepLens.md) | [Next (Bonus Challenge: Custom Facial Detection with SageMaker)](Part_4_Optional_Sagemaker/README.md)

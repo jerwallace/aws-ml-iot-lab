@@ -1,5 +1,5 @@
 
-# Register and Configure your DeepLens device
+# Pre-req: Register and Configure your DeepLens device
 
 ## Register AWS DeepLens
 
@@ -117,3 +117,6 @@ Note: Instead, if you are presented with the below screen, type the device passw
 Congratulations! You have successfully registered and configured your DeepLens device. To verify, return to [AWS DeepLens console](https://console.aws.amazon.com/deeplens/home?region=us-east-1#projects) and select **Devices** in the left side navigation bar and verify that your device has completed the registration process. You should see a green check mark and Registered under Registration status.
 
 ![device registered successfully](https://user-images.githubusercontent.com/11222214/41579540-3cc3560a-734c-11e8-82c0-6fc18c3952c8.JPG)
+
+-----------------------------------
+[Back (Home)](README.md) | [Next (Challenge 1: Facial Detection)](Part_2_Crop_Faces_With_DeepLens.md)

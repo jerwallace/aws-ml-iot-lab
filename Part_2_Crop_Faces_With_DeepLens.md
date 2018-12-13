@@ -98,3 +98,6 @@ On the AWS DeepLens console, you can track the progress of the deployment. It ca
 **Confirmation/ verification**
 
 Congratulations! You have completed this challenge. You will now find your cropped faces uplaod to your S3 bucket!
+
+-----------------------------------
+[Back (Pre-reqs)](Part_1_Setup_DeepLens.md) | [Next (Challenge 2: Sentiment Analysis)](Part_3_Sentiment_Analysis.md)
