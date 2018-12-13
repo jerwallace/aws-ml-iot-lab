@@ -2,21 +2,9 @@
 
 In the first challenge, we will crop the faces from our concert photos collected from DeepLens so we can run sentiment analysis using Rekognition. 
 
-## Setup IAM Roles:
-
-First, we need to add S3 permissions to the DeepLens Lambda role so the lambda on the device can call Put Object into the bucket of interest.
-
-Go to [IAM Console](https://console.aws.amazon.com/iam/home?region=us-east-1#/home)
-
-Choose Roles and look up AWSDeepLensGreenGrassGroupRole
-
-Click on the role, and click Attach Policy
-
-Search for AmazonS3FullAccess and choose the policy by checking the box and click on Attach Policy
-
 ## Create the Photos Bucket:
 
-We need to create an S3 bucket that we can upload faces to.
+First, we need to create an S3 bucket that we can upload faces to.
 
 Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for S3
 
@@ -24,7 +12,7 @@ Choose 'Create bucket'
 
 Name your bucket : face-detection-your-name
 
-Click on Create 
+Click on **Create**
 
 ### Create DeepLens Lambda
 
@@ -222,6 +210,11 @@ Before we can run this lambda on the device, we need to attach the right permiss
 
 Next, we need to add permissions to this role for the lambda function to access S3. To do this, go to the IAM dashboard, find the "AWSDeepLensGreenGrassGroupRole", and attach the policy "AmazonS3FullAccess".
 
+1. Go to [IAM Console](https://console.aws.amazon.com/iam/home?region=us-east-1#/home)
+2. Choose Roles and look up AWSDeepLensGreenGrassGroupRole
+3. Click on the role, and click Attach Policy
+4. Search for AmazonS3FullAccess and choose the policy by checking the box and click on Attach Policy
+
 ### Create & Deploy DeepLens Project
 
 With the lambda created, we can now make a project using it and the built-in face detection model.
@@ -266,13 +259,12 @@ Finally, click "Deploy" on the next screen to begin project deployment.
 
 ![Alt text](../screenshots/deeplens_project_9.png)
 
-You should now start to see deployment status. Once the project has been deployed, your deeplens will now start processing frames and running face-detection locally. When faces are detected, it will push to your S3 bucket. Everything else in the pipeline remains the same, so return to your dashboard to see the new results coming in!
+You should now start to see deployment status. Once the project has been deployed, your deeplens will now start processing frames and running face-detection locally. When faces are detected, it will push to your S3 bucket. Congratulations! Now you are ready to run sentiment analysis on the images of faces to see if people at the concert are having fun!
 
 **Note**: If your model download progress hangs at a blank state (Not 0%, but **blank**) then you may need to reset greengrass on DeepLens. To do this, log onto the DeepLens device, open up a terminal, and type the following command:
 `sudo systemctl restart greengrassd.service --no-block`. After a couple minutes, you model should start to download.
 
 All Done!
-
 
 -----------------------------------
 [Back (Pre-reqs)](../PreReq_Setup_DeepLens.md) | [Next (Challenge 2: Sentiment Analysis)](../Challenge_2_Sentiment_Analysis/README.md)
