@@ -2,13 +2,11 @@
 
 Welcome to DataPalooza! 
 
-Your bold startup has taken the challenge of providing a new type of EDM music festival experience. At venues with multiple stages, festival-goers are always looking to identify which DJ stage areas are the liveliest. This causes them to constantly move around between different stages and miss out. You are looking to use Machine Learning and IoT to come up with a connected fan experience that takes the music festival scene to the next level. From your initial research there are existing ML models that you can leverage to do face and emotion detection, but there are two ways that the predictions (inference) can be done; on the cloud and on the camera itself, but which one will work the best for your needs at the festival? 
-
-You are going to learn about both approaches and find out! 
-
-In this workshop you will use AWS and Intel technologies including Amazon SageMaker with Intel C5 Instances, AWS DeepLens, AWS Greengrass, Amazon Rekognition, AWS Lambda
+Your bold startup has taken the challenge of providing a new type of EDM music festival experience. At venues with multiple stages, festival-goers are always looking to identify which DJ stage areas are the liveliest. This causes them to constantly move around between different stages and miss out. You are looking to use Machine Learning and IoT to come up with a connected fan experience that takes the music festival scene to the next level.
 
 The objective of the workshop is to learn how to build and deploy a machine learning model and then run inference on it from the cloud and from the edge device.
+
+You will get hands-on with AWS and Intel technologies including AWS DeepLens, AWS Greengrass, Amazon Rekognition, AWS Lambda, and Amazon SageMaker with Intel C5 Instances.
 
 By the time you’re done with these challenges, EDM DJ’s will be able to tell whether the crowd is enjoying their set by the looks on their faces!
 
