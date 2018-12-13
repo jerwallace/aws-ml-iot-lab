@@ -44,7 +44,7 @@ Existing Role: AWSDeepLensLambdaRole
 
 Click Create Function
 
-Replace the default script with the [inference script](lambdas/inference-lambda.py) . You can select the inference script, by selecting Raw in the Github page and choosing the script using ctrl+A/ cmd+A . Copy the script and paste it into the lambda function (make sure you delete the default code).
+Replace the default script with the [inference script](inference-lambda.py) . You can select the inference script, by selecting Raw in the Github page and choosing the script using ctrl+A/ cmd+A . Copy the script and paste it into the lambda function (make sure you delete the default code).
 
 In the script, you will have to provide the name for your S3 bucket. Insert your bucket name in the code below
 
