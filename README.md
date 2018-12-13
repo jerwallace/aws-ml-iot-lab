@@ -2,11 +2,33 @@
 
 Welcome to DataPalooza! 
 
-In this workshop, you play the role of data scientists working for a bold new startup tasked with providing a new type of EDM music festival experience. You and your team aim to leverage Machine Learning and IoT to come up with a connected experience for both fans and artists alike by building a **Crowd Emotion Tracking Application**. Your application will provide real-time insights into the crowd response at different stages; this enables fans to find stages with the best performances, and artists to monitor crowd response to their setlist, adjusting if necessary.
+Your bold startup has taken the challenge of providing a new type of EDM music festival experience. At venues with multiple stages, festival-goers are always looking to identify which DJ stage areas are the liveliest. This causes them to constantly move around between different stages and miss out. You are looking to use Machine Learning and IoT to come up with a connected fan experience that takes the music festival scene to the next level. From your initial research there are existing ML models that you can leverage to do face and emotion detection, but there are two ways that the predictions (inference) can be done; on the cloud and on the camera itself, but which one will work the best for your needs at the festival? 
 
-To build this application, you will use AWS services such as Amazon SageMaker, Amazon S3, Amazon Rekognition, Amazon CloudWatch, Amazon DynamoDB, AWS Lambda, AWS GreenGrass, and AWS DeepLens. You will explore two common ML/IoT configurations for running inference: hosting inference in the cloud with C5 on a custom IoT device, and hosting inference on the edge with DeepLens.
+You are going to learn about both approaches and find out! 
 
-## [Prep Challenge](Prep_Challenge/README.md)
+In this workshop you will use AWS and Intel technologies including Amazon SageMaker with Intel C5 Instances, AWS DeepLens, AWS Greengrass, Amazon Rekognition, AWS Lambda
+
+The objective of the workshop is to learn how to build and deploy a machine learning model and then run inference on it from the cloud and from the edge device.
+
+By the time you’re done with these challenges, EDM DJ’s will be able to tell whether the crowd is enjoying their set by the looks on their faces!
+
+Here is what you will learn today:
+
+1. How to setup and connect to an AWS Deep Lens device.
+2. How to modify the DeepLens inference lambda function to upload cropped faces to S3
+3. How to deploy the inference lambda function and face detection model to AWS DeepLens
+4. How to create a lambda function to trigger Rekognition to identify emotions
+5. How to create an AWS DynamoDB table to store the recognized emotions
+6. How to analyze data using Amazon CloudWatch
+**Bonus:** How to build and train a face detection model in SageMaker
+
+## [Pre-req: Register and Configure your DeepLens device](Part_1_Setup_DeepLens.md)
+
+Before we get going, take a moment to setup and register your Deep Lens. After you have finished registering the device, run a simple Hello World application that detects faces using the default and included ML models for Deep Lens. 
+
+*Note: You will need an active AWS account to get started. To create one, [click here](https://portal.aws.amazon.com/billing/signup?redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).*
+
+## [Challenge 1: Deploy an AWS Lambda Function and Detection Model to Detect and Crop Faces from a Video Feed](Prep_Challenge/README.md)
 
 The first stop in the pipeline of your Crowd Emotion Tracking App is a face-detection model. You will be using Rekognition to detect face emotions. Rather than sending a stream of raw images to Rekognition, you are going to pre-process images with the face-detection model to:
 * Only send images to Rekognition when a face is detected
@@ -14,22 +36,15 @@ The first stop in the pipeline of your Crowd Emotion Tracking App is a face-dete
 
 This limits both the number of API calls you make, as well as the size of content you send.
 
-In this challenge, you will use SageMaker in your efforts to deploy a face-detection model. You will first launch a SageMaker notebook instance; from your notebook, you will be able to explore the data your model will train on, see how the model is trained, and deploy a pre-trained model to an inference endpoint. You will also create an S3 bucket for the endpoint to store detected faces, which you will need as part of your app's pipeline.
+In this challenge, you will use the built in face-detection model with AWS DeepLens and an AWS lambda function to crop and upload only the faces that are detected to S3.
 
-## [Challenge 1: ML in the Cloud](Challenge_1_ML_Cloud/README.md)
-Now that you have a face-detection model on a SageMaker endpoint, we can leverage that endpoint to build out a ML/IoT pipeline for our app that does all the inference in the cloud. By running inference in the cloud, you are able to use accurate models at a rapid pace by leveraging powerful computational instances like C5.
+## [Challenge 2: Deploy an AWS Lambda Function that will perform Sentiment Analysis with AWS Rekognition](Part_3_Sentiment_Analysis.md)
 
-In this challenge, you will configure an IoT device to act as a smart camera, which will send images to the endpoint for face-detection. You'll build out the rest of the pipeline necessary to create a dashboard for tracking crowd emotions in real-time, including AWS Lambda, Amazon DynamoDB, Amazon Rekognition, and Amazon CloudWatch.
+The next step of the pipeline will be to analyze the photos that are being written into the S3 bucket. To recap, our goal is to find out if our concert goers are having a good time and enjoying our set. In this challenge, we will deploy a lambda function that uses the AWS Rekognition APIs to process the images of cropped faces and writes the results to a DynamoDB table and a set of metrics to a CloudWatch dashboard.  
 
-## [Challenge 2: ML at the Edge](Challenge_1_ML_Cloud/README.md)
+## [Bonus Challenge: Deploy Your Own Facial Detection Model using Amazon Sagemaker](Part_4_Optional_Sagemaker/README.md)
 
-Now that you have successfully built out a pipeline for your application based around cloud-inference, it's time to revisit this configuration. In ML/IoT pipelines, you often have a choice to make about where inference is performed. Recall that in this particular scenario, the face detection inference is acting as a gate to the Rekognition API call:
-* Only trigger when a face is detected
-* Only actually send the face crop
-
-In the previous Challenge, you noted performance and speed as two advantages of cloud inference. Unfortunately, by keeping inference in the cloud your IoT devices must regularly send images at constant intervals (i.e. they're **always on**) and they send entire images. This seems like a waste of bandwidth; by putting face-detection inference at the edge, you can directly make Rekognition calls from the device itself. The tradeoff here is that while you are only sending face crops when they're detected over the network, inference at the edge can be less performant.
-
-In this challenge, you will swap out the ML/IoT part of the previous pipeline with a new pipeline that uses AWS DeepLens to run inference on the edge. DeepLens will then put face crops to the S3 bucket correctly, continuing the rest of the application pipeline.
+Hey wizards! If you have zipped through the lab, try building your own facial detection model using Amazon Sagemaker. For other labs and fun activities with the Deep Lens, check out this repository. 
 
 ## [Closeout](closeout.md)
 
