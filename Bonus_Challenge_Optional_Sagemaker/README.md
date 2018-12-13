@@ -65,5 +65,7 @@ This will open your Jupyter notebook.
 
 ![run](https://user-images.githubusercontent.com/11222214/38316244-21a07194-37df-11e8-9821-21d5d6e57976.JPG)
 
+Congratulations! You have successfully deployed your own face detection model with Amazon Sagemaker! Next, follow the same steps in the previous challenges to deploy your project and lambda function -- except this time, use your created SageMaker model instead of the one provided by default with AWS Deep Lens. 
+
 ----------------------------------
-[Back (Challenge 2: Sentiment Analysis)](../Challenge_2_Sentiment_Analysis/README.md)
+[Back (Challenge 2: Sentiment Analysis)](../Challenge_2_Sentiment_Analysis/README.md) | [Next (Cleanup Your Resources)](../closeout.md)
