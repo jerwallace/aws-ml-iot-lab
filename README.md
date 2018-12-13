@@ -27,7 +27,7 @@ Here is what you will learn today:
 
 Before we get going, take a moment to setup and register your Deep Lens. After you have finished registering the device, run a simple Hello World application that detects faces using the default and included ML models for Deep Lens. 
 
-**[Click here to Complete Pre-reqs!](Part_1_Setup_DeepLens.md)**
+**[Click here to Complete Pre-reqs!](PreReq_Setup_DeepLens.md)**
 
 ### **Challenge 1:** Deploy an AWS Lambda Function and Detection Model to Detect and Crop Faces from a Video Feed
 
@@ -39,19 +39,19 @@ This limits both the number of API calls you make, as well as the size of conten
 
 In this challenge, you will use the built in face-detection model with AWS DeepLens and an AWS lambda function to crop and upload only the faces that are detected to S3.
 
-**[Click here to Start Challenge!](Prep_Challenge/README.md)**
+**[Click here to Start Challenge!](Challenge_1_Crop_Faces_With_DeepLens/README.md)**
 
 ### **Challenge 2:** Deploy an AWS Lambda Function that will perform Sentiment Analysis with AWS Rekognition
 
 The next step of the pipeline will be to analyze the photos that are being written into the S3 bucket. To recap, our goal is to find out if our concert goers are having a good time and enjoying our set. In this challenge, we will deploy a lambda function that uses the AWS Rekognition APIs to process the images of cropped faces and writes the results to a DynamoDB table and a set of metrics to a CloudWatch dashboard.  
 
-**[Click here to Start Challenge!](Part_3_Sentiment_Analysis.md)**
+**[Click here to Start Challenge!](Challenge_2_Sentiment_Analysis/README.md)**
 
 ### **Bonus Challenge:** Deploy Your Own Facial Detection Model using Amazon Sagemaker
 
 Hey wizards! If you have zipped through the lab, try building your own facial detection model using Amazon Sagemaker. For other labs and fun activities with the Deep Lens, check out this repository. 
 
-**[Click here to Start the Bonus Challenge!](Part_4_Optional_Sagemaker/ReadMe.md)**
+**[Click here to Start the Bonus Challenge!](Bonus_Challenge_Optional_Sagemaker/ReadMe.md)**
 
 ## Closeout
 
