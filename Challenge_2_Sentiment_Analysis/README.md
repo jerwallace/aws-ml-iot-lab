@@ -1,5 +1,5 @@
 
-# Challenge 2: Sentiment Analysis
+# Challenge 2: Deploy an AWS Lambda Function that will perform Sentiment Analysis with AWS Rekognition
 
 In the final section of our workshop, we will capture the sentiment from the cropped faces of concert goers in the S3 bucket.
 
