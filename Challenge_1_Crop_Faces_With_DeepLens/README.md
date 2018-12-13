@@ -25,7 +25,7 @@ Before we deploy a project to DeepLens, we need to create a custom lambda functi
 
 Next, you will replace the default function with the [inference-lambda.py](inference-lambda.py) script in this folder, which we've included below:
 
-**Note: Be sure to replace "Bucket Name" with the name of the bucket you've been using thus far.**
+**Note: Be sure to replace "Bucket Name" with the name of the bucket you created above.**
 
 ```python
 #
