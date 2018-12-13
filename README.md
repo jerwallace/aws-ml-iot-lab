@@ -53,6 +53,8 @@ Hey wizards! If you have zipped through the lab, try building your own facial de
 
 **[>> Click here to Start the Bonus Challenge!](Part_4_Optional_Sagemaker/README.md)**
 
-## [Closeout](closeout.md)
+## Closeout
 
 During this event you have created quite a few resources, this section will cover deleting things so you do not end up with a surprise bill.
+
+[>> Click here to Remove the Resources from Today!](closeout.md)
