@@ -20,7 +20,7 @@ Here is what you will learn today:
 4. How to create a lambda function to trigger Rekognition to identify emotions
 5. How to create an AWS DynamoDB table to store the recognized emotions
 6. How to analyze data using Amazon CloudWatch
-**Bonus:** How to build and train a face detection model in SageMaker
+7. **Bonus:** How to build and train a face detection model in SageMaker
 
 ### **Pre-req:** Register and Configure your DeepLens device
 *Note: You will need an active AWS account to get started. To create one, [click here](https://portal.aws.amazon.com/billing/signup?redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).*
