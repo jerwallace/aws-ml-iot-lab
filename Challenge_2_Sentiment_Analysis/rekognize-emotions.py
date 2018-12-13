@@ -1,5 +1,4 @@
 from __future__ import print_function
-
 import boto3
 import urllib
 import datetime
@@ -8,7 +7,7 @@ print('Loading function')
 
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('cloudwatch')
-
+DYNAMO_TABLE_NAME = '<YOUR_DYNAMO_DB_TABLE>'
 
 # --------------- Helper Function to call CloudWatch APIs ------------------
 
@@ -54,7 +53,7 @@ def detect_faces(bucket, key):
             push_to_cloudwatch(item['Type'], round(item["Confidence"], 2))
 
     if push:  # Push only if at least on emotion was found
-        table = boto3.resource('dynamodb').Table('rekognize-faces')
+        table = boto3.resource('dynamodb').Table(DYNAMO_TABLE_NAME)
         table.put_item(Item=dynamo_obj)
 
     return response

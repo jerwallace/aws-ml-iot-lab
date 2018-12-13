@@ -59,7 +59,9 @@ Then click "Add". Next, select the center box with your rekognition lambda's nam
 
 ![Alt text](../screenshots/edit_lambda_3.png)
 
-Next, you're going to copy and paste code we have provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2, "[rekognize-emotions.py](../Challenge_2_ML_Edge/rekognize-emotions.py)", but it is included here as well for your convenience:
+Next, you're going to copy and paste code we have provided you in this repo into the text editor in the lambda dashboard. You can find it under Challenge_2_Sentiment_Analysis, "[rekognize-emotions.py](rekognize-emotions.py)", but it is included here as well for your convenience:
+
+**IMPORTANT: Remember to replace the DYNAMO_TABLE_NAME with your actual DynamoDB Table Name**
 
 You will want to download the file from that location, via the "raw" link.
 
@@ -74,7 +76,7 @@ print('Loading function')
 
 rekognition = boto3.client('rekognition')
 cloudwatch = boto3.client('cloudwatch')
-
+DYNAMO_TABLE_NAME = '<YOUR_DYNAMO_DB_TABLE>'
 
 # --------------- Helper Function to call CloudWatch APIs ------------------
 
@@ -120,7 +122,7 @@ def detect_faces(bucket, key):
             push_to_cloudwatch(item['Type'], round(item["Confidence"], 2))
 
     if push:  # Push only if at least on emotion was found
-        table = boto3.resource('dynamodb').Table('rekognize-faces')
+        table = boto3.resource('dynamodb').Table(DYNAMO_TABLE_NAME)
         table.put_item(Item=dynamo_obj)
 
     return response
@@ -145,6 +147,7 @@ def lambda_handler(event, context):
         print("Error processing object {} from bucket {}. ".format(key, bucket) +
               "Make sure your object and bucket exist and your bucket is in the same region as this function.")
         raise e
+
 ```
 
 Plese take a look at what this script does. The Function `lambda_handler` handles the lambda script when it's triggered by an event, in this case the "PutObject" to your S3 bucket under the prefix "faces". The handler then calls the `detect_faces`, which does the following:
