@@ -1,6 +1,6 @@
 # Challenge 1: Build a Project to Detect Faces and Send the Cropped Faces to S3 bucket
 
-In the first challenge, we will crop the faces from our concert photos collected from DeepLens so we can run sentiment analysis using Rekognition. 
+In the first challenge, we will crop the faces from our concert photos collected from the DeepLens device. The photos will then be sent to an S3 bucket, where we can run sentiment analysis on them using Rekognition in Challenge 2.
 
 ## Create the Photos Bucket:
 
