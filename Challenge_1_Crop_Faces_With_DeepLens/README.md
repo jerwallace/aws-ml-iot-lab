@@ -8,18 +8,34 @@ First, we need to create an S3 bucket that we can upload faces to.
 
 1. Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for S3
 2. Choose 'Create bucket'
+
+![Alt text](../screenshots/s3-create-bucket.png)
+
 3. Name your bucket : face-detection-your-name
+4. Click next. On the permissions wizard screen, **uncheck all block statements for public bucket access**. Note: These statements do not make the bucket public, they simply allow access to the bucket from public locations if an ALLOW statement is specified in S3 Access Control Lists, IAM policies or S3 bucket policies.
+
+![Alt text](../screenshots/s3-permissions.png)
+
 4. Click on **Create**
 
 ## Create DeepLens Lambda
 
-Now that you've registered your DeepLens device, it's time to create a custom project that we can deploy to the device to run face-detection and push crops to S3.
+Now that you've registered your DeepLens device, it's time to create a custom project that we can deploy to the device to run face-detection and push crops to S3. 
 
 A DeepLens **Project** consists of two things:
 * A model artifact: This is the model that is used for inference.
 * A Lambda function: This is the script that runs inference on the device.
 
-Before we deploy a project to DeepLens, we need to create a custom lambda function that will use the face-detection model on the device to detect faces and push crops to S3.
+Before we deploy a project to DeepLens, we need to create a custom lambda function that will use the face-detection model on the device to detect faces and push crops to S3. Open AWS Lambda service and press Create Function.
+
+Use the **greengrass-hello-world** lambda function blueprint when creating the function.
+
+![Alt text](../screenshots/lambda_blueprint.png)
+
+Next:
+* Under Name: enter your facial detection lambda function name
+* Under role: Select "Choose an existing role"
+* Under role name: Select "service-role/AWSDeepLensLambdaRole"
 
 ![Alt text](../screenshots/deeplens_lambda_0.png)
 
@@ -195,7 +211,7 @@ def function_handler(event, context):
     return
 ```
 
-Once you've copied and pasted the code, click "Save" as before, and this time you'll also click "Actions" and then "Publish new version".
+Once you've copied and pasted the code, click "Save" and click "Actions" and then "Publish new version".
 
 ![Alt text](../screenshots/deeplens_lambda_1.png)
 
