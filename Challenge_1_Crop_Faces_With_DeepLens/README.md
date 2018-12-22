@@ -30,7 +30,7 @@ Before we deploy a project to DeepLens, we need to create a custom lambda functi
 
 Use the **greengrass-hello-world** lambda function blueprint when creating the function.
 
-![Alt text](../screenshots/lambda_blueprint.png)
+![Lambda Blueprint: Greengrass Hello World](../screenshots/lambda-blueprint.png)
 
 Next:
 * Under Name: enter your facial detection lambda function name
