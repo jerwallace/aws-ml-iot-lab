@@ -2,7 +2,7 @@
 
 In this lab session, you will learn how to build and train a model in Amazon SageMaker
 
-Before we begin, download the repo to your local directory. You can download the repo from [root directory](https://github.com/fibbonnaci/DeepLens-workshops)
+Before we begin, download the repo to your local directory. You can download the repo from [root directory](https://github.com/jerwallace/aws-ml-iot-lab)
 
 Click **Clone or download** button on the right. 
 
